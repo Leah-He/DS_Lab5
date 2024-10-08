@@ -1,7 +1,10 @@
+import java.util.Stack;
+
 public class History
 {
 
-
+	Stack<Event> eventStorage = new Stack<>();
+	Stack<Event> undoStorage = new Stack<>();
 
     /**
        Notepad will call this function when thier text changes.
@@ -12,6 +15,10 @@ public class History
      */
    public void addEvent(boolean deletion, int position, String Change)
    {
+	   Event newEvent = new Event(Change, position, deletion);
+	   eventStorage.push(newEvent);
+	   undoStorage.clear();
+	   
    }
 
 
@@ -22,6 +29,10 @@ public class History
      */
    public void undoEvent(NotePad note)
    {
+	   Event lastEvent = new eventStorage.pop();
+	   
+	   
+	   
    }
 
 
