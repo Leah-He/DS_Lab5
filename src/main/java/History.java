@@ -29,10 +29,18 @@ public class History
      */
    public void undoEvent(NotePad note)
    {
-	   Event lastEvent = new eventStorage.pop();
 	   
-	   
-	   
+	   if (hasUndoData()) {
+		   Event lastEvent = eventStorage.pop();
+		   undoStorage.push(lastEvent);
+		   if (lastEvent.checkDeletion()) {
+			   note.insert(lastEvent.getPosition(), lastEvent.getEvent());
+		   } else {
+			   note.remove(lastEvent.getPosition(), lastEvent.getEvent().length());
+		   }
+		   
+	   }
+	   //System.out.println(undoStorage.peek());
    }
 
 
@@ -43,6 +51,16 @@ public class History
      */
    public void redoEvent(NotePad note)
    {
+	   if (hasReDoData()) {
+		   Event lastUndo = undoStorage.pop();
+		   eventStorage.push(lastUndo);
+		   if (!lastUndo.checkDeletion()) {
+			   note.insert(lastUndo.getPosition(), lastUndo.getEvent());
+		   } else {
+			   note.remove(lastUndo.getPosition(), lastUndo.getEvent().length());
+		   }
+		   //eventStorage.push(lastUndo);
+	   }
    	
    }
 
@@ -51,7 +69,7 @@ public class History
      */
    public boolean hasUndoData()
    {
-       return false;
+       return !eventStorage.isEmpty();
    }
 
     /**
@@ -59,7 +77,8 @@ public class History
      */
    public boolean hasReDoData()
    {
-       return false;
+	   //System.out.println(undoStorage.isEmpty());
+       return !undoStorage.isEmpty();//should use undoStorage instead of use eventStorage
    }
 	
 
